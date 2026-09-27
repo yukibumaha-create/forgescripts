@@ -3,646 +3,402 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Forge Script — FiveM Development</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<title>Forge Script  — Forge Script Development</title>
 <style>
-:root {
-  --bg:       #050608;
-  --bg1:      #0a0c10;
-  --bg2:      #0f1117;
-  --bg3:      #14161e;
-  --line:     #1e2130;
-  --line2:    #252838;
-  --text:     #f0f1f5;
-  --dim:      #7a7f96;
-  --faint:    #3e4255;
-  --green:    #4eff91;
-  --green2:   #1aff6e;
-  --green-d:  #0a3d1f;
-  --blue:     #5b8fff;
-  --blue-d:   #0d1f4a;
-  --danger:   #ff5f5f;
-  --danger-d: #3d1212;
-  --gold:     #f5c842;
-  --r: 14px;
-  --r-sm: 8px;
-  --font: 'Inter', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-  box-sizing: border-box;
-  padding-top: env(safe-area-inset-top,0px);
-  padding-bottom: env(safe-area-inset-bottom,0px);
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-padding-top: calc(72px + env(safe-area-inset-top,0px)); scroll-behavior: smooth; }
-html, body { height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-a { color: inherit; text-decoration: none; }
-.hidden { display: none !important; }
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+  :root{
+    --bg: #0c0d10;
+    --bg-raised: #15171c;
+    --bg-card: #191b21;
+    --line: #262932;
+    --text: #e7e8ea;
+    --text-dim: #8b8f9a;
+    --text-faint: #565a66;
+    --accent: #7cff6b;
+    --accent-dim: #3d8a34;
+    --danger: #ff6b6b;
+    --danger-dim: #4a2323;
+    --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top: env(safe-area-inset-top, 0px);}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family: var(--font-display);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
 
-/* ─── NOISE OVERLAY ─── */
-body::before {
-  content: "";
-  position: fixed; inset: 0; z-index: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.022;
-  pointer-events: none;
-}
+  /* ---------- layout shell ---------- */
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  .hidden{display:none !important;}
 
-/* ─── GLOW ORBS ─── */
-.orb {
-  position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
-  filter: blur(120px);
-}
-.orb-1 { width: 700px; height: 700px; top: -200px; left: -200px; background: radial-gradient(circle, rgba(78,255,145,0.06), transparent 70%); }
-.orb-2 { width: 500px; height: 500px; bottom: 0; right: -100px; background: radial-gradient(circle, rgba(91,143,255,0.05), transparent 70%); }
+  header.top{
+    position:sticky; top:0; z-index:40;
+    top: env(safe-area-inset-top, 0px);
+    background:rgba(12,13,16,0.86);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:19px; letter-spacing:-0.02em; cursor:pointer;}
+  .brand-mark{
+    width:28px;height:28px;border-radius:7px;
+    background: linear-gradient(155deg, var(--accent), #2f6b2a);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-mono); font-weight:700; font-size:14px; color:#08110a;
+    flex:none;
+  }
+  nav.top-links{display:flex; gap:24px; font-size:14.5px; color:var(--text-dim); align-items:center;}
+  nav.top-links a:hover{color:var(--text);}
+  .top-actions{display:flex; gap:10px; align-items:center;}
+  .discord-btn{
+    display:flex; align-items:center; gap:8px;
+    background:var(--accent); color:#08150a; font-weight:600; font-size:14px;
+    padding:9px 16px; border-radius:8px; border:none; cursor:pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .discord-btn:hover{ box-shadow:0 0 0 3px rgba(124,255,107,0.18); }
+  .discord-btn:active{ transform: scale(0.97); }
+  .admin-btn{
+    display:flex; align-items:center; gap:7px;
+    background:transparent; color:var(--text-dim); font-weight:600; font-size:13.5px;
+    padding:9px 14px; border-radius:8px; border:1px solid var(--line); cursor:pointer;
+  }
+  .admin-btn:hover{ color:var(--text); border-color:#3a3f4b; }
+  .admin-btn.is-active{ color:var(--accent); border-color:var(--accent-dim); }
 
-/* ─── HEADER ─── */
-header {
-  position: sticky; top: env(safe-area-inset-top,0px); z-index: 100;
-  background: rgba(5,6,8,0.75);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--line);
-}
-.header-inner {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 28px; height: 68px;
-}
-.brand {
-  display: flex; align-items: center; gap: 12px;
-  font-weight: 800; font-size: 17px; letter-spacing: -0.03em; cursor: pointer;
-  user-select: none;
-}
-.brand-icon {
-  width: 34px; height: 34px; border-radius: 10px; flex: none;
-  background: linear-gradient(135deg, var(--green), #0db84e);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 20px rgba(78,255,145,0.25);
-}
-.brand-icon svg { width: 18px; height: 18px; fill: #050608; }
-.brand-text { background: linear-gradient(135deg, #fff 60%, var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-nav.links { display: flex; gap: 32px; font-size: 14px; color: var(--dim); }
-nav.links a { transition: color .15s; position: relative; padding-bottom: 2px; }
-nav.links a::after {
-  content: ""; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
-  background: var(--green); transition: width .2s ease;
-}
-nav.links a:hover { color: var(--text); }
-nav.links a:hover::after { width: 100%; }
-.hdr-actions { display: flex; gap: 10px; align-items: center; }
-.btn-discord {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--green); color: #050608; font-weight: 700; font-size: 13.5px;
-  padding: 9px 18px; border-radius: var(--r-sm); border: none; cursor: pointer;
-  transition: box-shadow .2s, transform .15s;
-  letter-spacing: -0.01em;
-}
-.btn-discord:hover { box-shadow: 0 0 0 4px rgba(78,255,145,0.2), 0 4px 20px rgba(78,255,145,0.15); transform: translateY(-1px); }
-.btn-discord:active { transform: scale(0.97); }
-.btn-admin {
-  background: transparent; color: var(--dim); font-weight: 600; font-size: 13px;
-  padding: 9px 14px; border-radius: var(--r-sm); border: 1px solid var(--line2); cursor: pointer;
-  transition: all .15s; font-family: var(--font);
-}
-.btn-admin:hover { color: var(--text); border-color: var(--faint); }
-.btn-admin.is-active { color: var(--green); border-color: rgba(78,255,145,0.3); background: rgba(78,255,145,0.05); }
+  /* ---------- hero ---------- */
+  .hero{
+    padding:76px 0 56px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(600px 260px at 15% 0%, rgba(124,255,107,0.09), transparent 60%);
+    pointer-events:none;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns: 1.15fr 0.85fr; gap:48px; align-items:center;
+    position:relative;
+  }
+  .kicker{
+    font-family:var(--font-mono); font-size:13px; color:var(--accent);
+    margin:0 0 18px;
+  }
+  .kicker::before{content:"// "; color:var(--text-faint);}
+  h1.hero-title{
+    font-size:52px; line-height:1.04; letter-spacing:-0.025em; margin:0 0 22px;
+    font-weight:700;
+  }
+  .hero-title .cmd{ color:var(--text-dim); }
+  p.hero-sub{
+    font-size:17px; line-height:1.6; color:var(--text-dim); margin:0 0 30px; max-width:46ch;
+  }
+  .hero-cta{display:flex; gap:12px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--accent); color:#08150a; font-weight:600; font-size:15px;
+    padding:13px 22px; border-radius:9px; border:none; cursor:pointer;
+    transition: box-shadow .15s ease, transform .12s ease;
+  }
+  .btn-primary:hover{ box-shadow: 0 0 0 4px rgba(124,255,107,0.15); }
+  .btn-primary:active{ transform: scale(0.97); }
+  .btn-ghost{
+    background:transparent; color:var(--text); font-weight:600; font-size:15px;
+    padding:13px 22px; border-radius:9px; border:1px solid var(--line); cursor:pointer;
+  }
+  .btn-ghost:hover{ border-color:#3a3f4b; }
+  .btn-small{
+    font-size:13px; padding:8px 14px; border-radius:7px; font-weight:600; cursor:pointer;
+    border:1px solid var(--line); background:var(--bg-raised); color:var(--text);
+  }
+  .btn-small:hover{ border-color:#3a3f4b; }
+  .btn-small.danger{ color:var(--danger); }
+  .btn-small.danger:hover{ border-color:var(--danger); background:rgba(255,107,107,0.08); }
 
-/* ─── HERO ─── */
-.hero {
-  position: relative; padding: 100px 0 80px; overflow: hidden;
-}
-.hero-bg-grid {
-  position: absolute; inset: 0; z-index: 0;
-  background-image:
-    linear-gradient(rgba(78,255,145,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(78,255,145,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
-}
-.hero-bg-glow {
-  position: absolute; inset: 0; z-index: 0;
-  background: radial-gradient(ellipse 900px 500px at 20% -10%, rgba(78,255,145,0.07), transparent 60%);
-}
-.hero-inner { position: relative; z-index: 1; }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(78,255,145,0.07); border: 1px solid rgba(78,255,145,0.18);
-  border-radius: 999px; padding: 6px 14px; margin-bottom: 28px;
-}
-.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex: none; }
-.badge-text { font-family: var(--mono); font-size: 11.5px; color: var(--green); letter-spacing: 0.02em; }
-.hero-title {
-  font-size: clamp(42px, 6vw, 76px); font-weight: 900; letter-spacing: -0.04em;
-  line-height: 1.0; margin-bottom: 24px; max-width: 780px;
-}
-.hero-title .accent { color: var(--green); }
-.hero-title .dim { color: var(--dim); }
-.hero-sub {
-  font-size: 17px; line-height: 1.65; color: var(--dim); max-width: 520px; margin-bottom: 40px;
-  font-weight: 400;
-}
-.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-bottom: 64px; }
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--green); color: #050608; font-weight: 700; font-size: 15px;
-  padding: 14px 26px; border-radius: var(--r-sm); border: none; cursor: pointer;
-  transition: box-shadow .2s, transform .15s; letter-spacing: -0.01em; font-family: var(--font);
-}
-.btn-primary:hover { box-shadow: 0 0 0 4px rgba(78,255,145,0.2), 0 8px 30px rgba(78,255,145,0.2); transform: translateY(-2px); }
-.btn-primary:active { transform: scale(0.97); }
-.btn-ghost {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: transparent; color: var(--text); font-weight: 600; font-size: 15px;
-  padding: 14px 26px; border-radius: var(--r-sm); border: 1px solid var(--line2); cursor: pointer;
-  transition: all .15s; font-family: var(--font);
-}
-.btn-ghost:hover { border-color: var(--faint); background: var(--bg2); }
+  .hero-console{
+    background:var(--bg-raised); border:1px solid var(--line); border-radius:12px;
+    font-family:var(--font-mono); font-size:13px; line-height:1.75; color:var(--text-dim);
+    padding:20px 22px; overflow:hidden;
+  }
+  .hero-console .dots{display:flex; gap:6px; margin-bottom:14px;}
+  .hero-console .dots span{width:9px;height:9px;border-radius:50%; background:#33363f;}
+  .hero-console .ln .k{color:#5a9fff;}
+  .hero-console .ln .s{color:var(--accent);}
+  .hero-console .ln .c{color:var(--text-faint);}
 
-/* Hero code window */
-.hero-layout { display: grid; grid-template-columns: 1fr 420px; gap: 60px; align-items: center; }
-.hero-code {
-  background: var(--bg2); border: 1px solid var(--line2); border-radius: var(--r);
-  overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(78,255,145,0.05);
-}
-.code-bar {
-  display: flex; align-items: center; gap: 8px; padding: 14px 18px;
-  background: var(--bg3); border-bottom: 1px solid var(--line);
-}
-.code-dots { display: flex; gap: 6px; }
-.code-dot { width: 10px; height: 10px; border-radius: 50%; }
-.code-dot:nth-child(1) { background: #ff5f57; }
-.code-dot:nth-child(2) { background: #febc2e; }
-.code-dot:nth-child(3) { background: #28c840; }
-.code-file { font-family: var(--mono); font-size: 11.5px; color: var(--dim); margin-left: 8px; }
-.code-body { padding: 22px; font-family: var(--mono); font-size: 12.5px; line-height: 2; }
-.code-body .c  { color: var(--faint); }
-.code-body .k  { color: #bb86fc; }
-.code-body .s  { color: var(--green); }
-.code-body .n  { color: #79d4fd; }
-.code-body .v  { color: #f5c842; }
-.code-body .ok { color: var(--green); font-weight: 700; }
+  /* ---------- stats strip ---------- */
+  .stats{ display:flex; border-bottom:1px solid var(--line); }
+  .stat{ flex:1; padding:22px 24px; text-align:left; border-right:1px solid var(--line); }
+  .stat:last-child{border-right:none;}
+  .stat .num{font-size:26px; font-weight:700; letter-spacing:-0.02em;}
+  .stat .lbl{font-size:13px; color:var(--text-faint); margin-top:4px; font-family:var(--font-mono);}
 
-/* Stats bar */
-.stats-bar {
-  display: grid; grid-template-columns: repeat(4,1fr);
-  border: 1px solid var(--line2); border-radius: var(--r);
-  overflow: hidden; background: var(--bg2);
-  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
-}
-.stat-item {
-  padding: 28px 24px; position: relative;
-}
-.stat-item + .stat-item { border-left: 1px solid var(--line2); }
-.stat-num {
-  font-size: 32px; font-weight: 900; letter-spacing: -0.04em;
-  background: linear-gradient(135deg, var(--text), var(--dim));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  margin-bottom: 4px;
-}
-.stat-num.green { background: linear-gradient(135deg, var(--green), #0db84e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.stat-lbl { font-family: var(--mono); font-size: 11px; color: var(--faint); letter-spacing: 0.02em; }
+  /* ---------- section heads ---------- */
+  .section{padding:64px 0;}
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between; gap:20px;
+    margin-bottom:32px; flex-wrap:wrap;
+  }
+  .section-head h2{font-size:26px; margin:0; letter-spacing:-0.02em; font-weight:700;}
+  .section-head p{margin:6px 0 0; color:var(--text-dim); font-size:14.5px;}
 
-/* ─── SECTION LABELS ─── */
-.section { padding: 96px 0; position: relative; }
-.section + .section { border-top: 1px solid var(--line); }
-.sec-label {
-  font-family: var(--mono); font-size: 11.5px; color: var(--green);
-  letter-spacing: 0.08em; margin-bottom: 12px;
-  display: flex; align-items: center; gap: 10px;
-}
-.sec-label::before { content: ""; width: 24px; height: 1px; background: var(--green); opacity: 0.5; }
-.sec-title { font-size: clamp(26px, 3.5vw, 36px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
-.sec-sub { font-size: 15px; color: var(--dim); line-height: 1.6; max-width: 480px; }
-.sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
+  .filter-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .chip{
+    font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);
+    border:1px solid var(--line); border-radius:999px; padding:7px 14px;
+    background:var(--bg-raised); cursor:pointer;
+  }
+  .chip.active, .chip:hover{ color:var(--text); border-color:var(--accent-dim); }
+  .chip.active{ background: rgba(124,255,107,0.08); color:var(--accent); }
 
-/* ─── FILTER CHIPS ─── */
-.filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.chip {
-  font-family: var(--mono); font-size: 12px; color: var(--dim);
-  border: 1px solid var(--line2); border-radius: 999px; padding: 7px 16px;
-  background: var(--bg2); cursor: pointer; transition: all .15s;
-}
-.chip:hover { color: var(--text); border-color: var(--faint); }
-.chip.active { color: var(--green); border-color: rgba(78,255,145,0.3); background: rgba(78,255,145,0.07); }
+  /* ---------- product grid ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:18px;}
+  .card{
+    background:var(--bg-card); border:1px solid var(--line); border-radius:12px;
+    padding:20px; display:flex; flex-direction:column; gap:12px;
+    transition: border-color .15s ease;
+  }
+  .card:hover{ border-color:#333744; }
+  .card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
+  .card-tag{
+    font-family:var(--font-mono); font-size:11px; color:var(--accent);
+    background:rgba(124,255,107,0.08); border:1px solid rgba(124,255,107,0.2);
+    padding:3px 8px; border-radius:5px;
+  }
+  .card-thumb{
+    width:100%; aspect-ratio:16/9; border-radius:8px; overflow:hidden;
+    background:var(--bg); border:1px solid var(--line); flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .card-thumb .ph{font-family:var(--font-mono); font-size:11px; color:var(--text-faint);}
+  .card-details-btn{
+    background:transparent; color:var(--text-dim); font-weight:600; font-size:13px;
+    padding:9px; border-radius:8px; border:1px solid var(--line); cursor:pointer;
+  }
+  .card-details-btn:hover{ color:var(--text); border-color:#3a3f4b; }
+  .card-price{font-family:var(--font-mono); font-size:15px; color:var(--text); font-weight:700;}
+  .card h3{margin:0; font-size:17px; letter-spacing:-0.01em;}
+  .card p.desc{margin:0; font-size:13.5px; color:var(--text-dim); line-height:1.55; flex:1;}
+  .card-meta{
+    display:flex; gap:14px; font-size:12px; color:var(--text-faint); font-family:var(--font-mono);
+    border-top:1px solid var(--line); padding-top:12px;
+  }
+  .card-buy{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--bg-raised); color:var(--text); font-weight:600; font-size:14px;
+    padding:11px; border-radius:8px; border:1px solid var(--line); cursor:pointer;
+    transition: all .15s ease;
+  }
+  .card-buy:hover{ background:var(--accent); color:#08150a; border-color:var(--accent); }
+  .card-buy svg{flex:none;}
+  .card-admin-row{ display:flex; gap:8px; }
+  .card-admin-row .btn-small{ flex:1; }
+  .empty-state{
+    grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--text-dim);
+    border:1px dashed var(--line); border-radius:12px; font-size:14.5px;
+  }
 
-/* ─── PRODUCT GRID ─── */
-.product-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  /* ---------- admin ---------- */
+  .admin-banner{
+    display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    background:rgba(124,255,107,0.06); border:1px solid var(--accent-dim); border-radius:10px;
+    padding:12px 18px; margin-bottom:28px; font-size:13.5px;
+  }
+  .admin-banner .l{display:flex; align-items:center; gap:10px; color:var(--accent);}
+  .admin-banner .dot-live{width:7px;height:7px;border-radius:50%;background:var(--accent); flex:none;}
 
-.p-card {
-  background: var(--bg2); border: 1px solid var(--line2); border-radius: var(--r);
-  display: flex; flex-direction: column; overflow: hidden;
-  transition: border-color .2s, transform .2s, box-shadow .2s;
-  position: relative;
-}
-.p-card:hover {
-  border-color: rgba(78,255,145,0.2);
-  transform: translateY(-3px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(78,255,145,0.08);
-}
-.p-card-thumb {
-  width: 100%; aspect-ratio: 16/9; background: var(--bg3);
-  border-bottom: 1px solid var(--line);
-  display: flex; align-items: center; justify-content: center; overflow: hidden;
-  position: relative;
-}
-.p-card-thumb img { width:100%; height:100%; object-fit:cover; }
-.p-card-thumb .ph-label {
-  font-family: var(--mono); font-size: 11px; color: var(--faint);
-}
-.p-card-thumb-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(10,12,16,0.6), transparent 60%);
-  pointer-events: none;
-}
-.p-card-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-.p-card-top { display: flex; align-items: center; justify-content: space-between; }
-.p-tag {
-  font-family: var(--mono); font-size: 10.5px; color: var(--green);
-  background: rgba(78,255,145,0.08); border: 1px solid rgba(78,255,145,0.18);
-  padding: 3px 8px; border-radius: 5px;
-}
-.p-price { font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--text); }
-.p-name { font-size: 15.5px; font-weight: 700; letter-spacing: -0.02em; }
-.p-desc { font-size: 13px; color: var(--dim); line-height: 1.55; flex: 1; }
-.p-fw { font-family: var(--mono); font-size: 11px; color: var(--faint); }
-.p-actions { display: flex; gap: 8px; margin-top: 4px; }
-.p-buy {
-  flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
-  background: var(--bg3); border: 1px solid var(--line2); border-radius: var(--r-sm);
-  color: var(--text); font-weight: 600; font-size: 13px; padding: 10px; cursor: pointer;
-  transition: all .15s; font-family: var(--font);
-}
-.p-buy:hover { background: var(--green); color: #050608; border-color: var(--green); box-shadow: 0 4px 20px rgba(78,255,145,0.2); }
-.p-details-btn {
-  background: transparent; border: 1px solid var(--line2); border-radius: var(--r-sm);
-  color: var(--dim); font-size: 12px; font-weight: 600; padding: 10px 14px; cursor: pointer;
-  transition: all .15s; font-family: var(--font);
-}
-.p-details-btn:hover { color: var(--text); border-color: var(--faint); }
-.p-admin-row { display: flex; gap: 8px; margin-top: 4px; }
-.p-admin-row .btn-small { flex: 1; }
-.empty-state {
-  grid-column: 1/-1; text-align: center; padding: 80px 20px;
-  color: var(--dim); border: 1px dashed var(--line2); border-radius: var(--r); font-size: 14px;
-}
+  .panel{
+    background:var(--bg-raised); border:1px solid var(--line); border-radius:14px;
+    padding:28px;
+  }
+  .panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px;}
+  .panel-head h2{margin:0; font-size:20px;}
+  .panel-head span{font-family:var(--font-mono); font-size:12px; color:var(--text-faint);}
+  form.script-form{ display:grid; grid-template-columns:1fr 1fr; gap:14px 16px; }
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field.full{grid-column:1/-1;}
+  .field label{font-size:12.5px; color:var(--text-dim); font-family:var(--font-mono);}
+  .field input, .field select, .field textarea{
+    background:var(--bg); border:1px solid var(--line); border-radius:8px;
+    padding:10px 12px; color:var(--text); font-size:14px; font-family:var(--font-display);
+    outline:none;
+  }
+  .field textarea{resize:vertical; min-height:70px; font-family:var(--font-display);}
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--accent-dim);}
+  .form-actions{grid-column:1/-1; display:flex; gap:10px; margin-top:4px; align-items:center; flex-wrap:wrap;}
+  .form-note{font-size:12.5px; color:var(--text-faint); margin-left:auto;}
 
-/* ─── SMALL BUTTONS ─── */
-.btn-small {
-  font-size: 12.5px; padding: 8px 14px; border-radius: var(--r-sm); font-weight: 600; cursor: pointer;
-  border: 1px solid var(--line2); background: var(--bg3); color: var(--text); font-family: var(--font);
-  transition: all .15s;
-}
-.btn-small:hover { border-color: var(--faint); }
-.btn-small.danger { color: var(--danger); }
-.btn-small.danger:hover { border-color: var(--danger); background: rgba(255,95,95,0.07); }
+  .admin-table-wrap{ margin-top:28px; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  table.admin-table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  table.admin-table th{
+    text-align:left; font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint);
+    text-transform:none; padding:12px 16px; background:var(--bg-card); border-bottom:1px solid var(--line);
+  }
+  table.admin-table td{ padding:12px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+  table.admin-table tr:last-child td{ border-bottom:none; }
+  table.admin-table td.name{ font-weight:600; }
+  table.admin-table td.actions{ display:flex; gap:8px; white-space:nowrap; }
+  table.admin-table .muted{ color:var(--text-faint); font-family:var(--font-mono); font-size:12px; }
 
-/* ─── TEAM SECTION ─── */
-.team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-.team-card {
-  background: var(--bg2); border: 1px solid var(--line2); border-radius: var(--r);
-  padding: 32px; position: relative; overflow: hidden;
-  transition: border-color .25s, transform .2s, box-shadow .25s;
-}
-.team-card:hover {
-  border-color: rgba(78,255,145,0.25);
-  transform: translateY(-4px);
-  box-shadow: 0 24px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(78,255,145,0.07);
-}
-.team-card.blue-card:hover {
-  border-color: rgba(91,143,255,0.25);
-  box-shadow: 0 24px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(91,143,255,0.07);
-}
-.team-card-glow {
-  position: absolute; top: -60px; right: -60px;
-  width: 200px; height: 200px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(78,255,145,0.06), transparent 70%);
-  pointer-events: none;
-}
-.team-card.blue-card .team-card-glow {
-  background: radial-gradient(circle, rgba(91,143,255,0.07), transparent 70%);
-}
-.tc-header { display: flex; align-items: center; gap: 18px; margin-bottom: 22px; }
-.tc-avatar {
-  width: 64px; height: 64px; border-radius: 18px; flex: none;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 24px; letter-spacing: -0.02em;
-  position: relative;
-}
-.tc-avatar.green {
-  background: linear-gradient(145deg, rgba(78,255,145,0.15), rgba(78,255,145,0.05));
-  border: 1px solid rgba(78,255,145,0.25);
-  color: var(--green);
-  box-shadow: 0 0 30px rgba(78,255,145,0.1);
-}
-.tc-avatar.blue {
-  background: linear-gradient(145deg, rgba(91,143,255,0.15), rgba(91,143,255,0.05));
-  border: 1px solid rgba(91,143,255,0.25);
-  color: var(--blue);
-  box-shadow: 0 0 30px rgba(91,143,255,0.1);
-}
-.tc-info { flex: 1; min-width: 0; }
-.tc-name { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 6px; }
-.tc-role {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--mono); font-size: 11px; padding: 4px 10px; border-radius: 6px;
-}
-.tc-role.green { color: var(--green); background: rgba(78,255,145,0.07); border: 1px solid rgba(78,255,145,0.18); }
-.tc-role.blue  { color: var(--blue);  background: rgba(91,143,255,0.07); border: 1px solid rgba(91,143,255,0.18); }
-.tc-role-dot { width: 5px; height: 5px; border-radius: 50%; flex: none; }
-.green .tc-role-dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
-.blue  .tc-role-dot { background: var(--blue);  box-shadow: 0 0 6px var(--blue);  }
-.tc-desc { font-size: 14px; color: var(--dim); line-height: 1.7; margin-bottom: 24px; }
-.tc-divider { height: 1px; background: var(--line); margin-bottom: 22px; }
-.tc-skills { display: flex; flex-wrap: wrap; gap: 7px; }
-.tc-skill {
-  font-family: var(--mono); font-size: 11px; color: var(--faint);
-  border: 1px solid var(--line2); border-radius: 6px; padding: 4px 10px; background: var(--bg3);
-}
+  /* ---------- login modal ---------- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(6,7,9,0.7); backdrop-filter: blur(3px);
+    display:flex; align-items:center; justify-content:center; z-index:200; padding:20px;
+  }
+  .modal{
+    background:var(--bg-raised); border:1px solid var(--line); border-radius:14px;
+    padding:28px; width:100%; max-width:360px;
+  }
+  .modal h3{margin:0 0 6px; font-size:19px;}
+  .modal p.sub{margin:0 0 20px; color:var(--text-dim); font-size:13.5px;}
+  .modal .field{margin-bottom:14px;}
+  .modal-actions{display:flex; gap:10px; margin-top:6px;}
+  .modal-actions .btn-primary, .modal-actions .btn-ghost{flex:1;}
+  .modal-error{ color:var(--danger); font-size:13px; margin:-8px 0 14px; display:none; }
+  .modal-error.show{display:block;}
 
-/* ─── HOW IT WORKS ─── */
-.how-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-.how-card {
-  background: var(--bg2); border: 1px solid var(--line2); border-radius: var(--r);
-  padding: 28px; position: relative; overflow: hidden;
-}
-.how-card::before {
-  content: "";
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(78,255,145,0.3), transparent);
-}
-.how-num {
-  font-family: var(--mono); font-size: 11px; color: var(--green);
-  margin-bottom: 18px; letter-spacing: 0.04em;
-}
-.how-icon {
-  width: 40px; height: 40px; border-radius: 10px; margin-bottom: 16px;
-  background: rgba(78,255,145,0.07); border: 1px solid rgba(78,255,145,0.15);
-  display: flex; align-items: center; justify-content: center;
-}
-.how-icon svg { width: 18px; height: 18px; stroke: var(--green); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.how-title { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; }
-.how-desc { font-size: 13.5px; color: var(--dim); line-height: 1.6; }
+  /* ---------- how it works ---------- */
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .step{ border:1px solid var(--line); border-radius:12px; padding:22px; background:var(--bg-card); }
+  .step .n{font-family:var(--font-mono); color:var(--accent); font-size:13px; margin-bottom:10px;}
+  .step h4{margin:0 0 8px; font-size:16px;}
+  .step p{margin:0; color:var(--text-dim); font-size:13.5px; line-height:1.55;}
 
-/* ─── ADMIN BANNER ─── */
-.admin-banner {
-  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
-  background: rgba(78,255,145,0.04); border: 1px solid rgba(78,255,145,0.15); border-radius: var(--r);
-  padding: 14px 20px; margin-bottom: 32px; font-size: 13.5px;
-}
-.admin-banner .al { display: flex; align-items: center; gap: 10px; color: var(--green); font-weight: 500; }
-.al-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex: none; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  footer{
+    border-top:1px solid var(--line); padding:32px 0 calc(32px + env(safe-area-inset-bottom, 0px));
+    color:var(--text-faint); font-size:13px;
+  }
+  .foot-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;}
 
-/* ─── ADMIN PANEL ─── */
-.panel {
-  background: var(--bg2); border: 1px solid var(--line2); border-radius: var(--r); padding: 32px;
-}
-.panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
-.panel-head h2 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
-.panel-head span { font-family: var(--mono); font-size: 11.5px; color: var(--faint); }
-form.script-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
-.field { display: flex; flex-direction: column; gap: 6px; }
-.field.full { grid-column: 1/-1; }
-.field label { font-size: 11.5px; color: var(--dim); font-family: var(--mono); }
-.field input, .field select, .field textarea {
-  background: var(--bg3); border: 1px solid var(--line2); border-radius: var(--r-sm);
-  padding: 10px 14px; color: var(--text); font-size: 14px; font-family: var(--font);
-  outline: none; transition: border-color .15s;
-}
-.field textarea { resize: vertical; min-height: 70px; font-family: var(--font); }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: rgba(78,255,145,0.35); }
-.form-actions { grid-column: 1/-1; display: flex; gap: 10px; margin-top: 4px; align-items: center; flex-wrap: wrap; }
-.form-note { font-size: 12px; color: var(--faint); margin-left: auto; }
-.admin-table-wrap { margin-top: 32px; border: 1px solid var(--line2); border-radius: var(--r); overflow: hidden; }
-table.admin-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-table.admin-table th {
-  text-align: left; font-family: var(--mono); font-size: 11px; color: var(--faint);
-  padding: 12px 18px; background: var(--bg3); border-bottom: 1px solid var(--line2); letter-spacing: 0.02em;
-}
-table.admin-table td { padding: 13px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
-table.admin-table tr:last-child td { border-bottom: none; }
-table.admin-table td.name { font-weight: 600; font-size: 14px; }
-table.admin-table td.actions { display: flex; gap: 8px; white-space: nowrap; }
-table.admin-table .muted { color: var(--faint); font-family: var(--mono); font-size: 12px; }
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    background:var(--bg-card); border:1px solid var(--accent-dim); color:var(--text);
+    padding:13px 20px; border-radius:10px; font-size:14px; opacity:0; pointer-events:none;
+    transition: opacity .25s ease, transform .25s ease; z-index:100;
+    display:flex; align-items:center; gap:10px;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .toast.error{ border-color:var(--danger); }
+  .toast .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none;}
+  .toast.error .dot{background:var(--danger);}
 
-/* ─── MODALS ─── */
-.modal-backdrop {
-  position: fixed; inset: 0; background: rgba(3,4,6,0.8); backdrop-filter: blur(6px);
-  display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px;
-}
-.modal {
-  background: var(--bg2); border: 1px solid var(--line2); border-radius: var(--r);
-  padding: 32px; width: 100%; max-width: 380px;
-  box-shadow: 0 40px 100px rgba(0,0,0,0.7);
-}
-.modal h3 { margin: 0 0 6px; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
-.modal p.sub { margin: 0 0 22px; color: var(--dim); font-size: 14px; }
-.modal .field { margin-bottom: 14px; }
-.modal-actions { display: flex; gap: 10px; margin-top: 8px; }
-.modal-actions .btn-primary, .modal-actions .btn-ghost { flex: 1; justify-content: center; }
-.modal-error { color: var(--danger); font-size: 13px; margin: -8px 0 14px; display: none; font-family: var(--mono); }
-.modal-error.show { display: block; }
-#detailsModal { max-width: 580px; max-height: 88vh; overflow-y: auto; }
-
-/* ─── TOAST ─── */
-.toast {
-  position: fixed; bottom: calc(28px + env(safe-area-inset-bottom,0px)); left: 50%;
-  transform: translateX(-50%) translateY(12px);
-  background: var(--bg3); border: 1px solid var(--line2); color: var(--text);
-  padding: 13px 22px; border-radius: var(--r); font-size: 14px; opacity: 0; pointer-events: none;
-  transition: opacity .25s ease, transform .25s ease; z-index: 300;
-  display: flex; align-items: center; gap: 10px;
-  box-shadow: 0 16px 50px rgba(0,0,0,0.5);
-  font-weight: 500;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-.toast.error { border-color: rgba(255,95,95,0.3); }
-.toast-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex: none; }
-.toast.error .toast-dot { background: var(--danger); }
-
-/* ─── FOOTER ─── */
-footer {
-  border-top: 1px solid var(--line); padding: 40px 0 calc(40px + env(safe-area-inset-bottom,0px));
-  position: relative;
-}
-.foot-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
-.foot-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; letter-spacing: -0.02em; }
-.foot-brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); }
-.foot-text { font-size: 13px; color: var(--faint); }
-.foot-links { display: flex; gap: 24px; font-size: 13px; color: var(--dim); }
-.foot-links a:hover { color: var(--text); }
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 900px) {
-  .hero-layout { grid-template-columns: 1fr; }
-  .hero-code { display: none; }
-  .hero-title { font-size: 42px; }
-  .stats-bar { grid-template-columns: repeat(2,1fr); }
-  .stats-bar .stat-item:nth-child(3) { border-left: none; }
-  .stats-bar .stat-item:nth-child(1), .stats-bar .stat-item:nth-child(2) { border-bottom: 1px solid var(--line2); }
-  .product-grid { grid-template-columns: repeat(2,1fr); }
-  form.script-form { grid-template-columns: 1fr; }
-  nav.links { display: none; }
-  .team-grid { grid-template-columns: 1fr; }
-  .how-grid { grid-template-columns: 1fr; }
-  .admin-table-wrap { overflow-x: auto; }
-  table.admin-table { min-width: 640px; }
-}
-@media (max-width: 560px) {
-  .product-grid { grid-template-columns: 1fr; }
-  .hero-title { font-size: 34px; }
-  .stats-bar { grid-template-columns: repeat(2,1fr); }
-  .wrap { padding: 0 16px; }
-  .section { padding: 64px 0; }
-}
+  @media (max-width: 860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-console{order:-1;}
+    h1.hero-title{font-size:38px;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .stats{flex-wrap:wrap;}
+    .stat{flex:1 1 50%; border-bottom:1px solid var(--line);}
+    form.script-form{grid-template-columns:1fr;}
+    nav.top-links{display:none;}
+    .admin-table-wrap{overflow-x:auto;}
+    table.admin-table{min-width:640px;}
+  }
+  @media (max-width: 560px){
+    .grid{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr;}
+    h1.hero-title{font-size:32px;}
+    .wrap{padding:0 16px;}
+  }
 </style>
 </head>
 <body>
 
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-
-<!-- ══════════════════ HEADER ══════════════════ -->
-<header>
-  <div class="header-inner">
+<header class="top">
+  <div class="top-inner wrap" style="padding-left:0;padding-right:0;">
     <div class="brand" onclick="scrollToId('top')">
-      <div class="brand-icon">
-        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      </div>
-      <span class="brand-text">Forge Script</span>
+      <div class="brand-mark">FSD</div>
+      <span>Forge Script </span>
     </div>
-    <nav class="links">
+    <nav class="top-links">
       <a href="#store">Store</a>
-      <a href="#team">Team</a>
       <a href="#how">How it works</a>
     </nav>
-    <div class="hdr-actions">
-      <button class="btn-admin" id="adminNavBtn" onclick="onAdminNavClick()">Admin</button>
-      <button class="btn-discord" onclick="openDiscord('general')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.246.197.373.291a.077.077 0 0 1-.006.128 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.106c.36.698.772 1.362 1.225 1.994a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.057c.5-5.177-.838-9.673-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.211 0 2.176 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419Z"/></svg>
+    <div class="top-actions">
+      <button class="admin-btn" id="adminNavBtn" onclick="onAdminNavClick()">Admin</button>
+      <button class="discord-btn" onclick="openDiscord('general')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.246.197.373.291a.077.077 0 0 1-.006.128 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.106c.36.698.772 1.362 1.225 1.994a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.057c.5-5.177-.838-9.673-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.211 0 2.176 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419Z"/></svg>
         Join Discord
       </button>
     </div>
   </div>
 </header>
 
-<!-- ══════════════════ HERO ══════════════════ -->
 <section class="hero" id="top">
-  <div class="hero-bg-grid"></div>
-  <div class="hero-bg-glow"></div>
-  <div class="wrap hero-inner">
-    <div class="hero-layout">
-      <div>
-        <div class="hero-badge">
-          <span class="badge-dot"></span>
-          <span class="badge-text">FiveM Development Studio</span>
-        </div>
-        <h1 class="hero-title">
-          Premium scripts.<br>
-          <span class="accent">Built for speed.</span><br>
-          <span class="dim">Shipped on Discord.</span>
-        </h1>
-        <p class="hero-sub">
-          Custom jobs, HUDs, garages, and full server frameworks — browse what's ready or request something built to spec. Every purchase handled directly through Discord.
-        </p>
-        <div class="hero-cta">
-          <button class="btn-primary" onclick="scrollToId('store')">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7M12 5v14"/></svg>
-            Browse the store
-          </button>
-          <button class="btn-ghost" onclick="openDiscord('order')">Request a custom script</button>
-        </div>
-
-        <div class="stats-bar">
-          <div class="stat-item">
-            <div class="stat-num green" id="statCount">0</div>
-            <div class="stat-lbl">scripts listed</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num">ESX / QB</div>
-            <div class="stat-lbl">frameworks</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num">Discord</div>
-            <div class="stat-lbl">checkout & support</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num">Custom</div>
-            <div class="stat-lbl">builds on request</div>
-          </div>
-        </div>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker">fivem-development / scripts</p>
+      <h1 class="hero-title">FiveM scripts, <span class="cmd">built and shipped</span> by Forge Script .</h1>
+      <p class="hero-sub">Custom jobs, HUDs, garages, and full server frameworks — browse what's ready, or request something built to spec. Every purchase is handled straight through Discord, no third-party checkout.</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="scrollToId('store')">Browse the store</button>
+        <button class="btn-ghost" onclick="openDiscord('order')">Request a custom script</button>
       </div>
-
-      <div class="hero-code">
-        <div class="code-bar">
-          <div class="code-dots">
-            <div class="code-dot"></div>
-            <div class="code-dot"></div>
-            <div class="code-dot"></div>
-          </div>
-          <span class="code-file">forge_garage/server/main.lua</span>
-        </div>
-        <div class="code-body">
-          <div class="ln"><span class="c">-- Forge Script Garage v2.4.1</span></div>
-          <div class="ln"><span class="k">RegisterNetEvent</span><span class="c">(</span><span class="s">'fsd:spawnVehicle'</span><span class="c">)</span></div>
-          <div class="ln"><span class="k">AddEventHandler</span><span class="c">(</span><span class="s">'fsd:spawnVehicle'</span><span class="c">,</span></div>
-          <div class="ln">&nbsp;&nbsp;<span class="k">function</span><span class="c">(</span><span class="n">plate</span><span class="c">,</span> <span class="n">props</span><span class="c">)</span></div>
-          <div class="ln">&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">local</span> <span class="n">src</span> <span class="c">=</span> <span class="v">source</span></div>
-          <div class="ln">&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">local</span> <span class="n">coords</span> <span class="c">=</span> <span class="k">GetSpawnPoint</span><span class="c">()</span></div>
-          <div class="ln">&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">TriggerClientEvent</span><span class="c">(</span></div>
-          <div class="ln">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="s">'fsd:doSpawn'</span><span class="c">,</span> <span class="n">src</span><span class="c">,</span> <span class="n">props</span></div>
-          <div class="ln">&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">)</span></div>
-          <div class="ln">&nbsp;&nbsp;<span class="k">end</span></div>
-          <div class="ln"><span class="c">)</span></div>
-          <div class="ln">&nbsp;</div>
-          <div class="ln"><span class="ok">✓</span> <span class="c">resource started: fsd_garage</span></div>
-          <div class="ln"><span class="ok">✓</span> <span class="c">resource started: fsd_hud</span></div>
-          <div class="ln"><span class="ok">✓</span> <span class="c">all systems ready</span></div>
-        </div>
-      </div>
+    </div>
+    <div class="hero-console">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="ln"><span class="c">$</span> <span class="k">git clone</span> Forge Script /qb-garage.git</div>
+      <div class="ln"><span class="c">$</span> <span class="k">npm run</span> build</div>
+      <div class="ln"><span class="s">✓</span> resource started: Forge Script _garage</div>
+      <div class="ln"><span class="s">✓</span> resource started: Forge Script _hud</div>
+      <div class="ln"><span class="c">$</span> <span class="k">status</span> — all systems ready</div>
+      <div class="ln"><span class="c">&gt;</span> ready to deploy to your server</div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════ STORE ══════════════════ -->
+<div class="stats wrap" style="padding:0;">
+  <div class="stat"><div class="num" id="statCount">0</div><div class="lbl">scripts listed</div></div>
+  <div class="stat"><div class="num">ESX / QB</div><div class="lbl">frameworks supported</div></div>
+  <div class="stat"><div class="num">Discord</div><div class="lbl">checkout & support</div></div>
+  <div class="stat"><div class="num">Custom</div><div class="lbl">builds on request</div></div>
+</div>
+
 <section class="section" id="store">
   <div class="wrap">
 
     <div class="admin-banner hidden" id="adminBanner">
-      <div class="al"><span class="al-dot"></span> Admin mode active — you can add, edit, and delete listings.</div>
+      <div class="l"><span class="dot-live"></span> Admin mode — you can add, edit, and delete listings.</div>
       <div style="display:flex; gap:10px;">
-        <button class="btn-small" onclick="scrollToId('adminPanel')">Go to panel</button>
+        <button class="btn-small" onclick="scrollToId('adminPanel')">Go to admin panel</button>
         <button class="btn-small danger" onclick="logoutAdmin()">Log out</button>
       </div>
     </div>
 
-    <div class="sec-head">
+    <div class="section-head">
       <div>
-        <p class="sec-label">script store</p>
-        <h2 class="sec-title">Ready to deploy</h2>
-        <p class="sec-sub">Everything listed is managed by the admin panel below.</p>
+        <h2>Script store</h2>
+        <p>Everything here is pulled from the script database — admins manage it from the panel below.</p>
       </div>
       <div class="filter-row" id="filterRow"></div>
     </div>
-
-    <div class="product-grid" id="productGrid"></div>
+    <div class="grid" id="productGrid"></div>
   </div>
 </section>
 
-<!-- ══════════════════ ADMIN PANEL ══════════════════ -->
+<!-- ===================== ADMIN PANEL (hidden until logged in) ===================== -->
 <section class="section hidden" id="adminPanel" style="padding-top:0;">
   <div class="wrap">
     <div class="panel">
       <div class="panel-head">
         <h2 id="formTitle">Post a new script</h2>
-        <span>admin only — saved to script database</span>
+        <span>admin-only — saved to the script database</span>
       </div>
       <form class="script-form" id="scriptForm">
         <input type="hidden" id="f-id" value="">
@@ -674,31 +430,33 @@ footer {
           <textarea id="f-desc" placeholder="What does this script do?" required></textarea>
         </div>
         <div class="field">
-          <label for="f-image">Preview image URL</label>
-          <input id="f-image" type="text" placeholder="https://…">
+          <label for="f-image">Preview image link</label>
+          <input id="f-image" type="text" placeholder="https://example.com/preview.png">
         </div>
         <div class="field">
-          <label for="f-youtube">YouTube preview URL</label>
-          <input id="f-youtube" type="text" placeholder="https://youtube.com/watch?v=…">
+          <label for="f-youtube">YouTube preview link</label>
+          <input id="f-youtube" type="text" placeholder="https://youtube.com/watch?v=...">
         </div>
         <div class="field full">
           <label for="f-docs">Documentation</label>
-          <textarea id="f-docs" placeholder="Install steps, config notes, requirements, changelog…" style="min-height:110px;"></textarea>
+          <textarea id="f-docs" placeholder="Install steps, config notes, requirements, changelog — anything buyers or you need on hand." style="min-height:110px;"></textarea>
         </div>
         <div class="field full">
-          <label for="f-discord">Discord link (buy button target)</label>
+          <label for="f-discord">Discord invite or channel link (buy button target)</label>
           <input id="f-discord" type="text" placeholder="https://discord.gg/yourinvite" required>
         </div>
         <div class="form-actions">
           <button type="submit" class="btn-primary" id="formSubmitBtn">Post script</button>
           <button type="button" class="btn-ghost hidden" id="formCancelBtn" onclick="cancelEdit()">Cancel edit</button>
-          <span class="form-note">Buy buttons open this Discord link</span>
+          <span class="form-note">Buy buttons open this link in a new tab</span>
         </div>
       </form>
 
       <div class="admin-table-wrap">
         <table class="admin-table">
-          <thead><tr><th>Script</th><th>Category</th><th>Price</th><th>Framework</th><th>Actions</th></tr></thead>
+          <thead>
+            <tr><th>Script</th><th>Category</th><th>Price</th><th>Framework</th><th>Actions</th></tr>
+          </thead>
           <tbody id="adminTableBody"></tbody>
         </table>
       </div>
@@ -706,130 +464,41 @@ footer {
   </div>
 </section>
 
-<!-- ══════════════════ TEAM ══════════════════ -->
-<section class="section" id="team">
+<section class="section" id="how" style="padding-top:0;">
   <div class="wrap">
-    <div class="sec-head" style="margin-bottom:48px;">
-      <div>
-        <p class="sec-label">the people</p>
-        <h2 class="sec-title">Meet the team</h2>
-        <p class="sec-sub">Two developers. Every script written, reviewed, and supported by these two.</p>
+    <div class="section-head"><div><h2>How buying works</h2></div></div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <h4>Pick a script</h4>
+        <p>Browse the store and check the framework, price, and description for what you need.</p>
       </div>
-    </div>
-
-    <div class="team-grid">
-
-      <!-- LUNA -->
-      <div class="team-card">
-        <div class="team-card-glow"></div>
-        <div class="tc-header">
-          <div class="tc-avatar green">L</div>
-          <div class="tc-info">
-            <p class="tc-name">Luna</p>
-            <span class="tc-role green"><span class="tc-role-dot"></span>Developer Lead</span>
-          </div>
-        </div>
-        <p class="tc-desc">
-          Luna leads every Forge Script release — from architecture to final QA. She owns the core framework, sets coding standards, and is ultimately responsible for what ships to your server. If it's in the store, Luna built it.
-        </p>
-        <div class="tc-divider"></div>
-        <div class="tc-skills">
-          <span class="tc-skill">QBCore</span>
-          <span class="tc-skill">ESX</span>
-          <span class="tc-skill">Lua</span>
-          <span class="tc-skill">NUI / JavaScript</span>
-          <span class="tc-skill">Framework architecture</span>
-          <span class="tc-skill">SQL / oxmysql</span>
-        </div>
+      <div class="step">
+        <div class="n">02</div>
+        <h4>Hit buy</h4>
+        <p>The buy button opens our Discord — no card details ever go through the site itself.</p>
       </div>
-
-      <!-- ONSE -->
-      <div class="team-card blue-card">
-        <div class="team-card-glow"></div>
-        <div class="tc-header">
-          <div class="tc-avatar blue">O</div>
-          <div class="tc-info">
-            <p class="tc-name">Onse</p>
-            <span class="tc-role blue"><span class="tc-role-dot"></span>Support Developer</span>
-          </div>
-        </div>
-        <p class="tc-desc">
-          Onse handles all post-purchase support, bug reports, and custom configuration requests. Open a ticket on Discord and Onse will get you running fast — he knows the codebase inside out and doesn't leave tickets open.
-        </p>
-        <div class="tc-divider"></div>
-        <div class="tc-skills">
-          <span class="tc-skill">Lua</span>
-          <span class="tc-skill">Debugging</span>
-          <span class="tc-skill">Config support</span>
-          <span class="tc-skill">Discord tickets</span>
-          <span class="tc-skill">Custom builds</span>
-          <span class="tc-skill">Documentation</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ HOW IT WORKS ══════════════════ -->
-<section class="section" id="how">
-  <div class="wrap">
-    <div class="sec-head" style="margin-bottom:40px;">
-      <div>
-        <p class="sec-label">process</p>
-        <h2 class="sec-title">How buying works</h2>
-      </div>
-    </div>
-    <div class="how-grid">
-      <div class="how-card">
-        <div class="how-num">01</div>
-        <div class="how-icon">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        </div>
-        <div class="how-title">Pick a script</div>
-        <p class="how-desc">Browse the store and check the framework, price, and description for what you need.</p>
-      </div>
-      <div class="how-card">
-        <div class="how-num">02</div>
-        <div class="how-icon">
-          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 17l.92-.08Z"/></svg>
-        </div>
-        <div class="how-title">Hit buy on Discord</div>
-        <p class="how-desc">The buy button opens our Discord directly — no card details ever go through the site.</p>
-      </div>
-      <div class="how-card">
-        <div class="how-num">03</div>
-        <div class="how-icon">
-          <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        </div>
-        <div class="how-title">Get your files</div>
-        <p class="how-desc">Open a ticket, confirm the script, pay through the methods listed there, and get your files instantly.</p>
+      <div class="step">
+        <div class="n">03</div>
+        <h4>Checkout in Discord</h4>
+        <p>Open a ticket, confirm the script, pay through the methods listed there, and get your files.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════ FOOTER ══════════════════ -->
 <footer>
-  <div class="wrap foot-inner">
-    <div class="foot-brand">
-      <div class="foot-brand-dot"></div>
-      Forge Script
-    </div>
-    <div class="foot-text">© 2025 Forge Script Development. All purchases finalized in Discord.</div>
-    <div class="foot-links">
-      <a href="#store">Store</a>
-      <a href="#team">Team</a>
-      <a href="#how">Process</a>
-    </div>
+  <div class="wrap foot-row">
+    <span>Forge Script  — Forge Script Development.</span>
+    <span>All purchases finalized in Discord.</span>
   </div>
 </footer>
 
-<!-- ══════════════════ LOGIN MODAL ══════════════════ -->
+<!-- ===================== LOGIN MODAL ===================== -->
 <div class="modal-backdrop hidden" id="loginBackdrop">
   <div class="modal">
     <h3>Admin login</h3>
-    <p class="sub">Sign in to manage store listings.</p>
+    <p class="sub">Sign in to add, edit, or remove store listings.</p>
     <div class="modal-error" id="loginError">Wrong username or password.</div>
     <form id="loginForm">
       <div class="field">
@@ -848,52 +517,66 @@ footer {
   </div>
 </div>
 
-<!-- ══════════════════ DETAILS MODAL ══════════════════ -->
+<!-- ===================== SCRIPT DETAILS MODAL ===================== -->
 <div class="modal-backdrop hidden" id="detailsBackdrop">
-  <div class="modal" id="detailsModal">
+  <div class="modal" id="detailsModal" style="max-width:560px; max-height:86vh; overflow-y:auto;">
     <div id="detailsMedia"></div>
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-top:18px;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-top:16px;">
       <h3 id="detailsName" style="margin:0;"></h3>
-      <span id="detailsPrice" style="font-family:var(--mono);font-size:17px;font-weight:700;color:var(--green);white-space:nowrap;"></span>
+      <span id="detailsPrice" class="card-price"></span>
     </div>
-    <div style="display:flex;gap:10px;margin:10px 0 6px;flex-wrap:wrap;">
-      <span class="p-tag" id="detailsCategory"></span>
-      <span style="font-family:var(--mono);font-size:11px;color:var(--faint);align-self:center;" id="detailsFramework"></span>
+    <div style="display:flex; gap:10px; margin:10px 0 4px; flex-wrap:wrap;">
+      <span class="card-tag" id="detailsCategory"></span>
+      <span class="muted" style="font-family:var(--font-mono); font-size:12px; color:var(--text-faint); align-self:center;" id="detailsFramework"></span>
     </div>
-    <p id="detailsDesc" style="margin-top:10px;font-size:14px;color:var(--dim);line-height:1.65;"></p>
+    <p class="sub" id="detailsDesc" style="margin-top:10px;"></p>
     <div id="detailsDocsWrap" class="hidden">
-      <h4 style="margin:20px 0 10px;font-size:13px;color:var(--dim);font-family:var(--mono);">Documentation</h4>
-      <div id="detailsDocs" style="white-space:pre-wrap;font-size:13px;line-height:1.65;color:var(--text);background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r-sm);padding:16px;"></div>
+      <h4 style="margin:18px 0 8px; font-size:14px; color:var(--text-dim);">Documentation</h4>
+      <div id="detailsDocs" style="white-space:pre-wrap; font-size:13.5px; line-height:1.6; color:var(--text); background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:14px;"></div>
     </div>
-    <div class="modal-actions" style="margin-top:22px;">
+    <div class="modal-actions" style="margin-top:20px;">
       <button type="button" class="btn-ghost" onclick="closeDetailsModal()">Close</button>
       <button type="button" class="btn-primary" id="detailsBuyBtn">Buy on Discord</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"><span class="toast-dot"></span><span id="toastMsg"></span></div>
+<div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Opening Discord…</span></div>
 
 <script>
-  const ADMIN_USERNAME = "Forge Script";
+  // =====================================================================
+  // ADMIN CREDENTIALS — change these before you actually use this site.
+  // This is a client-side gate only (fine for a low-stakes single-owner
+  // shop) — it is NOT real security, since anyone who views the page
+  // source can read these values. For a public-facing store where that
+  // matters, this login should be swapped for a real server-side check.
+  // =====================================================================
+  const ADMIN_USERNAME = "Forge Script ";
   const ADMIN_PASSWORD = "changeme123";
+
   const DEFAULT_DISCORD = "https://discord.gg/your-invite-here";
-  const DB_KEY = "fsd_scripts_db_v2";
-  const SESSION_KEY = "fsd_admin_session_v2";
+  const DB_KEY = "Forge Script _scripts_db_v1";
+  const SESSION_KEY = "Forge Script _admin_session_v1";
 
   const DEFAULT_SCRIPTS = [
-    { id:"tbx-garage", name:"Forge Script Garage System", price:"$25", category:"Garage & Vehicles", framework:"QBCore",
-      desc:"Multi-garage support, impound, vehicle stats saved on store, and a clean NUI vehicle list.", discord:DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
-    { id:"tbx-hud", name:"Forge Script Minimal HUD", price:"$18", category:"HUD & UI", framework:"Standalone",
-      desc:"Lightweight HUD with speed, health, armor, hunger/thirst, and full color customization.", discord:DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
-    { id:"tbx-jobs", name:"Forge Script Job Pack — Mechanic", price:"$30", category:"Jobs", framework:"QBCore / ESX",
-      desc:"Full mechanic job with repair stations, tow calls, part crafting, and a boss menu.", discord:DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
-    { id:"tbx-admin", name:"Forge Script Admin Menu", price:"$20", category:"Admin & Anticheat", framework:"Standalone",
-      desc:"Player management, spectate, noclip, weather/time control, and a built-in report system.", discord:DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
-    { id:"tbx-core", name:"Forge Script Core Framework", price:"$60", category:"Framework", framework:"Standalone",
-      desc:"A lightweight base framework — jobs, inventory hooks, and database layer ready to extend.", discord:DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
-    { id:"tbx-phone", name:"Forge Script Phone", price:"$22", category:"HUD & UI", framework:"QBCore",
-      desc:"In-game phone with messages, calls, marketplace, and a bank app. Easy to reskin.", discord:DEFAULT_DISCORD, image:"", youtube:"", docs:"" }
+    { id:"tbx-garage", name:"Forge Script  Garage System", price:"$25", category:"Garage & Vehicles", framework:"QBCore",
+      desc:"Multi-garage support, impound, vehicle stats saved on store, and a clean NUI vehicle list.",
+      discord: DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
+    { id:"tbx-hud", name:"Forge Script  Minimal HUD", price:"$18", category:"HUD & UI", framework:"Standalone",
+      desc:"Lightweight HUD with speed, health, armor, hunger/thirst, and full color customization.",
+      discord: DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
+    { id:"tbx-jobs", name:"Forge Script  Job Pack — Mechanic", price:"$30", category:"Jobs", framework:"QBCore / ESX",
+      desc:"Full mechanic job with repair stations, tow calls, part crafting, and a boss menu.",
+      discord: DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
+    { id:"tbx-admin", name:"Forge Script  Admin Menu", price:"$20", category:"Admin & Anticheat", framework:"Standalone",
+      desc:"Player management, spectate, noclip, weather/time control, and a built-in report system.",
+      discord: DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
+    { id:"tbx-core", name:"Forge Script  Core Framework", price:"$60", category:"Framework", framework:"Standalone",
+      desc:"A lightweight base framework — jobs, inventory hooks, and database layer ready to extend.",
+      discord: DEFAULT_DISCORD, image:"", youtube:"", docs:"" },
+    { id:"tbx-phone", name:"Forge Script  Phone", price:"$22", category:"HUD & UI", framework:"QBCore",
+      desc:"In-game phone with messages, calls, marketplace, and a bank app. Easy to reskin.",
+      discord: DEFAULT_DISCORD, image:"", youtube:"", docs:"" }
   ];
 
   function loadDB(){
@@ -904,17 +587,30 @@ footer {
       return Array.isArray(parsed) ? parsed : DEFAULT_SCRIPTS.slice();
     }catch(e){ return DEFAULT_SCRIPTS.slice(); }
   }
-  function saveDB(list){ try{ localStorage.setItem(DB_KEY, JSON.stringify(list)); }catch(e){} }
-  function isAdmin(){ try{ return sessionStorage.getItem(SESSION_KEY)==="1"; }catch(e){ return false; } }
-  function setAdmin(on){ try{ if(on) sessionStorage.setItem(SESSION_KEY,"1"); else sessionStorage.removeItem(SESSION_KEY); }catch(e){} }
+  function saveDB(list){
+    try{ localStorage.setItem(DB_KEY, JSON.stringify(list)); }catch(e){}
+  }
+  function isAdmin(){
+    try{ return sessionStorage.getItem(SESSION_KEY) === "1"; }catch(e){ return false; }
+  }
+  function setAdmin(on){
+    try{ if(on) sessionStorage.setItem(SESSION_KEY, "1"); else sessionStorage.removeItem(SESSION_KEY); }catch(e){}
+  }
 
-  let scripts = loadDB(), activeFilter = "All", editingId = null;
+  let scripts = loadDB();
+  let activeFilter = "All";
+  let editingId = null;
 
   function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   }
-  function categories(){ return ["All",...Array.from(new Set(scripts.map(s=>s.category)))]; }
-  function scrollToId(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); }
+  function categories(){
+    return ["All", ...Array.from(new Set(scripts.map(s => s.category)))];
+  }
+  function scrollToId(id){
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }
   function youtubeId(url){
     if(!url) return null;
     const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/);
@@ -928,73 +624,92 @@ footer {
     toast.classList.toggle("error", !!isError);
     toast.classList.add("show");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(()=>toast.classList.remove("show"), 2800);
+    toastTimer = setTimeout(()=> toast.classList.remove("show"), 2800);
   }
-  function openDiscord(ctx){
-    showToast(ctx==="order"?"Opening Discord to request a custom script…":"Opening Discord…");
-    window.open(DEFAULT_DISCORD,"_blank","noopener");
+  function openDiscord(context){
+    showToast(context === "order" ? "Opening Discord to request a custom script…" : "Opening Discord…");
+    window.open(DEFAULT_DISCORD, "_blank", "noopener");
   }
 
+  // ---------- rendering: public store ----------
   function renderFilters(){
     const row = document.getElementById("filterRow");
     row.innerHTML = categories().map(cat =>
       `<button class="chip ${cat===activeFilter?'active':''}" data-cat="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`
     ).join("");
     row.querySelectorAll(".chip").forEach(btn=>{
-      btn.addEventListener("click",()=>{ activeFilter=btn.getAttribute("data-cat"); renderFilters(); renderGrid(); });
+      btn.addEventListener("click", ()=>{ activeFilter = btn.getAttribute("data-cat"); renderFilters(); renderGrid(); });
     });
   }
 
   function renderGrid(){
     const grid = document.getElementById("productGrid");
-    const list = activeFilter==="All" ? scripts : scripts.filter(s=>s.category===activeFilter);
+    const list = activeFilter === "All" ? scripts : scripts.filter(s => s.category === activeFilter);
     document.getElementById("statCount").textContent = scripts.length;
-    if(list.length===0){ grid.innerHTML=`<div class="empty-state">No scripts in this category yet.</div>`; return; }
-    grid.innerHTML = list.map(s=>{
+
+    if(list.length === 0){
+      grid.innerHTML = `<div class="empty-state">No scripts in this category yet.</div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(s => {
       const yid = youtubeId(s.youtube);
       const thumbSrc = s.image ? s.image : (yid ? `https://img.youtube.com/vi/${yid}/hqdefault.jpg` : "");
       return `
-      <div class="p-card">
-        <div class="p-card-thumb">
-          ${thumbSrc ? `<img src="${escapeHtml(thumbSrc)}" alt="${escapeHtml(s.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=&quot;ph-label&quot;>no preview</span>'">` : `<span class="ph-label">no preview</span>`}
-          <div class="p-card-thumb-overlay"></div>
+      <div class="card">
+        <div class="card-thumb">
+          ${thumbSrc ? `<img src="${escapeHtml(thumbSrc)}" alt="${escapeHtml(s.name)} preview" loading="lazy" onerror="this.parentElement.innerHTML='<span class=&quot;ph&quot;>no preview</span>'">` : `<span class="ph">no preview</span>`}
         </div>
-        <div class="p-card-body">
-          <div class="p-card-top">
-            <span class="p-tag">${escapeHtml(s.category)}</span>
-            <span class="p-price">${escapeHtml(s.price)}</span>
-          </div>
-          <div class="p-name">${escapeHtml(s.name)}</div>
-          <div class="p-desc">${escapeHtml(s.desc)}</div>
-          <div class="p-fw">${escapeHtml(s.framework)}</div>
-          <div class="p-actions">
-            <button class="p-buy" data-discord="${escapeHtml(s.discord||DEFAULT_DISCORD)}" data-name="${escapeHtml(s.name)}">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.246.197.373.291a.077.077 0 0 1-.006.128 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.106c.36.698.772 1.362 1.225 1.994a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.057c.5-5.177-.838-9.673-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.211 0 2.176 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419Z"/></svg>
-              Buy on Discord
-            </button>
-            <button class="p-details-btn" data-details="${escapeHtml(s.id)}">Details</button>
-          </div>
-          ${isAdmin() ? `<div class="p-admin-row"><button class="btn-small" data-edit="${escapeHtml(s.id)}">Edit</button><button class="btn-small danger" data-delete="${escapeHtml(s.id)}">Delete</button></div>` : ""}
+        <div class="card-top">
+          <span class="card-tag">${escapeHtml(s.category)}</span>
+          <span class="card-price">${escapeHtml(s.price)}</span>
         </div>
-      </div>`;
+        <h3>${escapeHtml(s.name)}</h3>
+        <p class="desc">${escapeHtml(s.desc)}</p>
+        <div class="card-meta"><span>${escapeHtml(s.framework)}</span></div>
+        <div style="display:flex; gap:8px;">
+          <button class="card-buy" style="flex:1;" data-discord="${escapeHtml(s.discord || DEFAULT_DISCORD)}" data-name="${escapeHtml(s.name)}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.246.197.373.291a.077.077 0 0 1-.006.128 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.106c.36.698.772 1.362 1.225 1.994a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.057c.5-5.177-.838-9.673-3.549-13.66a.061.061 0 0 0-.031-.028ZM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.211 0 2.176 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419Z"/></svg>
+            Buy on Discord
+          </button>
+          <button class="card-details-btn" data-details="${escapeHtml(s.id)}">Details</button>
+        </div>
+        ${isAdmin() ? `
+          <div class="card-admin-row">
+            <button class="btn-small" data-edit="${escapeHtml(s.id)}">Edit</button>
+            <button class="btn-small danger" data-delete="${escapeHtml(s.id)}">Delete</button>
+          </div>` : ``}
+      </div>
+    `;
     }).join("");
 
-    grid.querySelectorAll(".p-buy").forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        const link = btn.getAttribute("data-discord")||DEFAULT_DISCORD;
-        showToast(`Opening Discord to purchase ${btn.getAttribute("data-name")||"this script"}…`);
-        window.open(link,"_blank","noopener");
+    grid.querySelectorAll(".card-buy").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const link = btn.getAttribute("data-discord") || DEFAULT_DISCORD;
+        const name = btn.getAttribute("data-name") || "this script";
+        showToast(`Opening Discord to purchase ${name}…`);
+        window.open(link, "_blank", "noopener");
       });
     });
-    grid.querySelectorAll("[data-details]").forEach(btn=>{ btn.addEventListener("click",()=>openDetailsModal(btn.getAttribute("data-details"))); });
-    grid.querySelectorAll("[data-edit]").forEach(btn=>{ btn.addEventListener("click",()=>startEdit(btn.getAttribute("data-edit"))); });
-    grid.querySelectorAll("[data-delete]").forEach(btn=>{ btn.addEventListener("click",()=>deleteScript(btn.getAttribute("data-delete"))); });
+    grid.querySelectorAll("[data-details]").forEach(btn=>{
+      btn.addEventListener("click", ()=> openDetailsModal(btn.getAttribute("data-details")));
+    });
+    grid.querySelectorAll("[data-edit]").forEach(btn=>{
+      btn.addEventListener("click", ()=> startEdit(btn.getAttribute("data-edit")));
+    });
+    grid.querySelectorAll("[data-delete]").forEach(btn=>{
+      btn.addEventListener("click", ()=> deleteScript(btn.getAttribute("data-delete")));
+    });
   }
 
+  // ---------- rendering: admin table ----------
   function renderAdminTable(){
     const body = document.getElementById("adminTableBody");
-    if(scripts.length===0){ body.innerHTML=`<tr><td colspan="5" class="muted">No scripts yet.</td></tr>`; return; }
-    body.innerHTML = scripts.map(s=>`
+    if(scripts.length === 0){
+      body.innerHTML = `<tr><td colspan="5" class="muted">No scripts yet — add your first one above.</td></tr>`;
+      return;
+    }
+    body.innerHTML = scripts.map(s => `
       <tr>
         <td class="name">${escapeHtml(s.name)}</td>
         <td>${escapeHtml(s.category)}</td>
@@ -1004,132 +719,200 @@ footer {
           <button class="btn-small" data-edit="${escapeHtml(s.id)}">Edit</button>
           <button class="btn-small danger" data-delete="${escapeHtml(s.id)}">Delete</button>
         </td>
-      </tr>`).join("");
-    body.querySelectorAll("[data-edit]").forEach(btn=>{ btn.addEventListener("click",()=>startEdit(btn.getAttribute("data-edit"))); });
-    body.querySelectorAll("[data-delete]").forEach(btn=>{ btn.addEventListener("click",()=>deleteScript(btn.getAttribute("data-delete"))); });
+      </tr>
+    `).join("");
+    body.querySelectorAll("[data-edit]").forEach(btn=>{
+      btn.addEventListener("click", ()=> startEdit(btn.getAttribute("data-edit")));
+    });
+    body.querySelectorAll("[data-delete]").forEach(btn=>{
+      btn.addEventListener("click", ()=> deleteScript(btn.getAttribute("data-delete")));
+    });
   }
 
-  function renderAll(){ renderFilters(); renderGrid(); if(isAdmin()) renderAdminTable(); }
+  function renderAll(){
+    renderFilters();
+    renderGrid();
+    if(isAdmin()) renderAdminTable();
+  }
 
+  // ---------- admin CRUD ----------
   function startEdit(id){
-    const s = scripts.find(x=>x.id===id); if(!s) return;
+    const s = scripts.find(x => x.id === id);
+    if(!s) return;
     editingId = id;
-    document.getElementById("f-id").value=s.id;
-    document.getElementById("f-name").value=s.name;
-    document.getElementById("f-price").value=s.price;
-    document.getElementById("f-category").value=s.category;
-    document.getElementById("f-framework").value=s.framework;
-    document.getElementById("f-desc").value=s.desc;
-    document.getElementById("f-image").value=s.image||"";
-    document.getElementById("f-youtube").value=s.youtube||"";
-    document.getElementById("f-docs").value=s.docs||"";
-    document.getElementById("f-discord").value=s.discord||"";
-    document.getElementById("formTitle").textContent="Edit script";
-    document.getElementById("formSubmitBtn").textContent="Save changes";
+    document.getElementById("f-id").value = s.id;
+    document.getElementById("f-name").value = s.name;
+    document.getElementById("f-price").value = s.price;
+    document.getElementById("f-category").value = s.category;
+    document.getElementById("f-framework").value = s.framework;
+    document.getElementById("f-desc").value = s.desc;
+    document.getElementById("f-image").value = s.image || "";
+    document.getElementById("f-youtube").value = s.youtube || "";
+    document.getElementById("f-docs").value = s.docs || "";
+    document.getElementById("f-discord").value = s.discord || "";
+    document.getElementById("formTitle").textContent = "Edit script";
+    document.getElementById("formSubmitBtn").textContent = "Save changes";
     document.getElementById("formCancelBtn").classList.remove("hidden");
     scrollToId("adminPanel");
   }
+
   function cancelEdit(){
-    editingId=null;
+    editingId = null;
     document.getElementById("scriptForm").reset();
-    document.getElementById("f-id").value="";
-    ["f-image","f-youtube","f-docs"].forEach(id=>document.getElementById(id).value="");
-    document.getElementById("formTitle").textContent="Post a new script";
-    document.getElementById("formSubmitBtn").textContent="Post script";
+    document.getElementById("f-id").value = "";
+    document.getElementById("f-image").value = "";
+    document.getElementById("f-youtube").value = "";
+    document.getElementById("f-docs").value = "";
+    document.getElementById("formTitle").textContent = "Post a new script";
+    document.getElementById("formSubmitBtn").textContent = "Post script";
     document.getElementById("formCancelBtn").classList.add("hidden");
   }
+
   function deleteScript(id){
-    const s=scripts.find(x=>x.id===id); if(!s) return;
+    const s = scripts.find(x => x.id === id);
+    if(!s) return;
     if(!confirm(`Delete "${s.name}" from the store?`)) return;
-    scripts=scripts.filter(x=>x.id!==id); saveDB(scripts);
-    if(editingId===id) cancelEdit();
-    renderAll(); showToast(`"${s.name}" removed.`);
+    scripts = scripts.filter(x => x.id !== id);
+    saveDB(scripts);
+    if(editingId === id) cancelEdit();
+    renderAll();
+    showToast(`"${s.name}" removed from the store.`);
   }
 
-  document.getElementById("scriptForm").addEventListener("submit",function(e){
+  document.getElementById("scriptForm").addEventListener("submit", function(e){
     e.preventDefault();
-    const name=document.getElementById("f-name").value.trim();
-    const price=document.getElementById("f-price").value.trim();
-    const category=document.getElementById("f-category").value;
-    const framework=document.getElementById("f-framework").value.trim();
-    const desc=document.getElementById("f-desc").value.trim();
-    const image=document.getElementById("f-image").value.trim();
-    const youtube=document.getElementById("f-youtube").value.trim();
-    const docs=document.getElementById("f-docs").value.trim();
-    const discord=document.getElementById("f-discord").value.trim();
-    if(!name||!price||!framework||!desc||!discord) return;
+    const name = document.getElementById("f-name").value.trim();
+    const price = document.getElementById("f-price").value.trim();
+    const category = document.getElementById("f-category").value;
+    const framework = document.getElementById("f-framework").value.trim();
+    const desc = document.getElementById("f-desc").value.trim();
+    const image = document.getElementById("f-image").value.trim();
+    const youtube = document.getElementById("f-youtube").value.trim();
+    const docs = document.getElementById("f-docs").value.trim();
+    const discord = document.getElementById("f-discord").value.trim();
+    if(!name || !price || !framework || !desc || !discord) return;
+
     if(editingId){
-      const idx=scripts.findIndex(x=>x.id===editingId);
-      if(idx>-1){ scripts[idx]={...scripts[idx],name,price,category,framework,desc,image,youtube,docs,discord}; showToast(`"${name}" updated.`); }
+      const idx = scripts.findIndex(x => x.id === editingId);
+      if(idx > -1){
+        scripts[idx] = { ...scripts[idx], name, price, category, framework, desc, image, youtube, docs, discord };
+        showToast(`"${name}" updated.`);
+      }
     } else {
-      scripts.unshift({id:"fsd-"+Date.now(),name,price,category,framework,desc,image,youtube,docs,discord});
+      scripts.unshift({ id: "tbx-" + Date.now(), name, price, category, framework, desc, image, youtube, docs, discord });
       showToast(`"${name}" posted to the store.`);
     }
-    saveDB(scripts); cancelEdit(); activeFilter="All"; renderAll(); scrollToId("store");
+    saveDB(scripts);
+    cancelEdit();
+    activeFilter = "All";
+    renderAll();
+    scrollToId("store");
   });
 
+  // ---------- details modal ----------
   function openDetailsModal(id){
-    const s=scripts.find(x=>x.id===id); if(!s) return;
-    const yid=youtubeId(s.youtube);
-    let mediaHtml="";
+    const s = scripts.find(x => x.id === id);
+    if(!s) return;
+    const yid = youtubeId(s.youtube);
+
+    let mediaHtml = "";
     if(yid){
-      mediaHtml=`<div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;border:1px solid var(--line2);">
+      mediaHtml = `<div style="position:relative; width:100%; aspect-ratio:16/9; border-radius:10px; overflow:hidden; border:1px solid var(--line);">
         <iframe src="https://www.youtube.com/embed/${escapeHtml(yid)}" title="${escapeHtml(s.name)} preview"
-          style="position:absolute;inset:0;width:100%;height:100%;border:0;"
-          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
+          style="position:absolute; inset:0; width:100%; height:100%; border:0;"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>`;
     } else if(s.image){
-      mediaHtml=`<img src="${escapeHtml(s.image)}" alt="${escapeHtml(s.name)}"
-        style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;border:1px solid var(--line2);display:block;"
+      mediaHtml = `<img src="${escapeHtml(s.image)}" alt="${escapeHtml(s.name)} preview"
+        style="width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:10px; border:1px solid var(--line); display:block;"
         onerror="this.style.display='none'">`;
     }
-    document.getElementById("detailsMedia").innerHTML=mediaHtml;
-    document.getElementById("detailsName").textContent=s.name;
-    document.getElementById("detailsPrice").textContent=s.price;
-    document.getElementById("detailsCategory").textContent=s.category;
-    document.getElementById("detailsFramework").textContent=s.framework;
-    document.getElementById("detailsDesc").textContent=s.desc;
-    const docsWrap=document.getElementById("detailsDocsWrap");
-    if(s.docs&&s.docs.trim()){ docsWrap.classList.remove("hidden"); document.getElementById("detailsDocs").textContent=s.docs; }
-    else docsWrap.classList.add("hidden");
-    document.getElementById("detailsBuyBtn").onclick=()=>{
+    document.getElementById("detailsMedia").innerHTML = mediaHtml;
+
+    document.getElementById("detailsName").textContent = s.name;
+    document.getElementById("detailsPrice").textContent = s.price;
+    document.getElementById("detailsCategory").textContent = s.category;
+    document.getElementById("detailsFramework").textContent = s.framework;
+    document.getElementById("detailsDesc").textContent = s.desc;
+
+    const docsWrap = document.getElementById("detailsDocsWrap");
+    if(s.docs && s.docs.trim()){
+      docsWrap.classList.remove("hidden");
+      document.getElementById("detailsDocs").textContent = s.docs;
+    } else {
+      docsWrap.classList.add("hidden");
+    }
+
+    const buyBtn = document.getElementById("detailsBuyBtn");
+    buyBtn.onclick = () => {
       showToast(`Opening Discord to purchase ${s.name}…`);
-      window.open(s.discord||DEFAULT_DISCORD,"_blank","noopener");
+      window.open(s.discord || DEFAULT_DISCORD, "_blank", "noopener");
     };
+
     document.getElementById("detailsBackdrop").classList.remove("hidden");
   }
   function closeDetailsModal(){
     document.getElementById("detailsBackdrop").classList.add("hidden");
-    document.getElementById("detailsMedia").innerHTML="";
+    document.getElementById("detailsMedia").innerHTML = "";
   }
-  document.getElementById("detailsBackdrop").addEventListener("click",function(e){ if(e.target===this) closeDetailsModal(); });
+  document.getElementById("detailsBackdrop").addEventListener("click", function(e){
+    if(e.target === this) closeDetailsModal();
+  });
 
-  function openLoginModal(){ document.getElementById("loginBackdrop").classList.remove("hidden"); document.getElementById("loginError").classList.remove("show"); document.getElementById("li-user").focus(); }
-  function closeLoginModal(){ document.getElementById("loginBackdrop").classList.add("hidden"); document.getElementById("loginForm").reset(); }
-  function onAdminNavClick(){ if(isAdmin()) scrollToId("adminPanel"); else openLoginModal(); }
+  // ---------- login / admin mode ----------
+  function openLoginModal(){
+    document.getElementById("loginBackdrop").classList.remove("hidden");
+    document.getElementById("loginError").classList.remove("show");
+    document.getElementById("li-user").focus();
+  }
+  function closeLoginModal(){
+    document.getElementById("loginBackdrop").classList.add("hidden");
+    document.getElementById("loginForm").reset();
+  }
+  function onAdminNavClick(){
+    if(isAdmin()){ scrollToId("adminPanel"); } else { openLoginModal(); }
+  }
   function applyAdminUI(){
-    const on=isAdmin();
-    document.getElementById("adminPanel").classList.toggle("hidden",!on);
-    document.getElementById("adminBanner").classList.toggle("hidden",!on);
-    const btn=document.getElementById("adminNavBtn");
-    btn.textContent=on?"Admin panel":"Admin";
-    btn.classList.toggle("is-active",on);
+    const on = isAdmin();
+    document.getElementById("adminPanel").classList.toggle("hidden", !on);
+    document.getElementById("adminBanner").classList.toggle("hidden", !on);
+    const navBtn = document.getElementById("adminNavBtn");
+    navBtn.textContent = on ? "Admin panel" : "Admin";
+    navBtn.classList.toggle("is-active", on);
     if(on) renderAdminTable();
   }
-  function logoutAdmin(){ setAdmin(false); cancelEdit(); applyAdminUI(); renderGrid(); showToast("Logged out."); scrollToId("top"); }
+  function logoutAdmin(){
+    setAdmin(false);
+    cancelEdit();
+    applyAdminUI();
+    renderGrid();
+    showToast("Logged out of admin.");
+    scrollToId("top");
+  }
 
-  document.getElementById("loginForm").addEventListener("submit",function(e){
+  document.getElementById("loginForm").addEventListener("submit", function(e){
     e.preventDefault();
-    const u=document.getElementById("li-user").value.trim();
-    const p=document.getElementById("li-pass").value;
-    if(u===ADMIN_USERNAME&&p===ADMIN_PASSWORD){
-      setAdmin(true); closeLoginModal(); applyAdminUI(); renderGrid(); showToast("Logged in as admin."); scrollToId("adminPanel");
-    } else { document.getElementById("loginError").classList.add("show"); }
+    const u = document.getElementById("li-user").value.trim();
+    const p = document.getElementById("li-pass").value;
+    if(u === ADMIN_USERNAME && p === ADMIN_PASSWORD){
+      setAdmin(true);
+      closeLoginModal();
+      applyAdminUI();
+      renderGrid();
+      showToast("Logged in as admin.");
+      scrollToId("adminPanel");
+    } else {
+      document.getElementById("loginError").classList.add("show");
+    }
   });
-  document.getElementById("loginBackdrop").addEventListener("click",function(e){ if(e.target===this) closeLoginModal(); });
+  document.getElementById("loginBackdrop").addEventListener("click", function(e){
+    if(e.target === this) closeLoginModal();
+  });
 
+  // ---------- init ----------
   applyAdminUI();
   renderAll();
 </script>
+
 </body>
 </html>
